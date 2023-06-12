@@ -14,10 +14,9 @@ for improved surface snapping of snappyHexMesh.
 import os
 
 class generateSurfaceFeatureExtractDict(object):
-    def __init__(self, caseDir, airfoil, angle):
+    def __init__(self, caseDir, bluff):
         self.caseDir = caseDir
-        self.airfoil = airfoil
-        self.angle = angle
+        self.bluff = bluff
 
         self.writeToFile()
 
@@ -42,7 +41,7 @@ class generateSurfaceFeatureExtractDict(object):
         f.write('}                                                                                  \n')
         f.write('// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //    \n')
         f.write('                                                                                   \n')
-        f.write('naca{}_{}.stl \n'.format(self.airfoil, self.angle))
+        f.write('bluff_{}.stl \n'.format(self.bluff))
         f.write('{                                                                                  \n')
         f.write('   extractionMethod        extractFromSurface;                                     \n')
         f.write('                                                                                   \n')
