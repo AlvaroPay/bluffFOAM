@@ -1,8 +1,9 @@
 # ----------------------------------------------------------------------------
-# Created By  : Sebastian Widmann
+# Created By  : Sebastian Widmann and Alvaro Pay Lozano
 # Institution : TU Munich, Department of Aerospace and Geodesy
 # Created Date: October 9, 2022
-# version ='1.0'
+# New version Date: 2023
+# version ='2.0'
 # ---------------------------------------------------------------------------
 import numpy as np
 import subprocess
@@ -32,8 +33,7 @@ from scripts.generateZeroDirectoryFiles import generateInitialConditionsFiles
 
 def generateNacaAirfoils():
     '''
-        Generate all required possibilities of NACA 4- and 5-series
-        airfoils
+        Generate all required possibilities of 5 digits bluff bodies
     Returns
     -------
         list of combined combinations
