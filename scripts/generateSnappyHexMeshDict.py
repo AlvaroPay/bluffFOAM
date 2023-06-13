@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------------
-# Created By  : Sebastian Widmann
+# Created By  : Sebastian Widmann and Alvaro Pay Lozano
 # Institution : TU Munich, Department of Aerospace and Geodesy
 # Created Date: June 16, 2022
-# version ='1.0'
+# version ='2.0'
 # ---------------------------------------------------------------------------
 """
 Class implementation to generate background mesh with blockMesh. Background
@@ -16,10 +16,9 @@ import os
 from scripts.flowProperties import *
 
 class generateSnappyHexMeshDict(object):
-    def __init__(self, caseDir, airfoil, angle, mach, baseCellSize, meshing):
+    def __init__(self, caseDir, bluff, mach, baseCellSize, meshing):
         self.caseDir = caseDir
-        self.airfoil = airfoil
-        self.angle = angle
+        self.bluff = bluff
         self.mach = mach
         self.baseCellSize = baseCellSize
         self.meshing = meshing
@@ -62,7 +61,7 @@ class generateSnappyHexMeshDict(object):
         f.write('                                                                                   \n')
         f.write('geometry                                                                           \n')
         f.write('{                                                                                  \n')
-        f.write('   naca{}_{}.stl \n'.format(self.airfoil, self.angle))
+        f.write('   bluff_{}.stl \n'.format(self.bluff))
         f.write('   {                                                                               \n')
         f.write('       type    triSurfaceMesh;                                                     \n')
         f.write('       name    wing;                                                               \n')
