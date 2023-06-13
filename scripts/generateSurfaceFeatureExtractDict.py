@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------------
-# Created By  : Sebastian Widmann
+# Created By  : Sebastian Widmann and Alvaro Pay
 # Institution : TU Munich, Department of Aerospace and Geodesy
 # Created Date: August 31, 2022
-# version ='1.0'
+# version ='2.0'
 # ---------------------------------------------------------------------------
 """
 Class implementation to generate explicitly use surfaceExtractFeature by
