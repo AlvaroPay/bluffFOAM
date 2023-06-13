@@ -21,7 +21,7 @@ from PyFoam.Execution.BasicRunner import BasicRunner
 from PyFoam.Basics.Utilities import copytree
 from PyFoam.Execution.ParallelExecution import LAMMachine
 
-from scripts.generateStlFile import generateGeometryFile
+from scripts.generateStlFile import generateBluffBodies
 from scripts.generateSurfaceFeatureExtractDict import \
     generateSurfaceFeatureExtractDict
 from scripts.generateBlockMeshDict import generateBlockMeshDict
@@ -31,39 +31,29 @@ from scripts.generateForceCoefficientsDict import generateForceCoefficientsDict
 from scripts.generateZeroDirectoryFiles import generateInitialConditionsFiles
 
 
-def generateNacaAirfoils():
+def generateBluff():
     '''
         Generate all required possibilities of 5 digits bluff bodies
     Returns
     -------
         list of combined combinations
     '''
-    naca4, naca5 = [], []
-    maxCamber = np.arange(0, 10, 1)
-    position = np.arange(0, 10, 1)
-    thickness = np.arange(5, 41, 5)
+    bluff = []
+    
+    shape = np.arange(0,5,1)
+    aspect_ratio = np.arange(0,18,1)
+    angle = np.arange(0,11,1)
+    edge = np.arange(0,5,1)
 
-    for m in maxCamber:
-        for p in position:
-            for t in thickness:
-                if (m != 0 and p == 0) or (m == 0 and p != 0):
-                    continue
-                naca4.append(str(m) + str(p) + str(t).zfill(2))
+    for s in shape:
+        for a in aspect_ratio:
+            for a in angle:
+                for e in edge:
+                    if aspect_ratio < 10:
+                        bluff.append(str(s) + 0 + str(a) + str(a) + str(e))
+                    else:
+                        bluff.append(str(s) + str(a) + str(a) + str(e))
 
-    maxCamber = np.arange(1, 7, 1)
-    position = np.arange(2, 6, 1)
-    reflex = np.arange(1, 2, 1)  # only include reflex airfoils
-    thickness = np.arange(5, 31, 5)
-
-    for m in maxCamber:
-        for p in position:
-            for q in reflex:
-                for t in thickness:
-                    if (m != 0 and p == 0) or (m == 0 and p != 0):
-                        continue
-                    naca5.append(str(m) + str(p) + str(q) + str(t).zfill(2))
-
-    return naca4 + naca5
 
 def deleteTempMeshFiles(meshDir):
     '''
@@ -103,23 +93,23 @@ def deletePyFoamTempFiles(newCase):
 
 
 def runCase(args):
-    naca, angle, mach = args  # unpack arguments
+    bluff, mach = args  # unpack arguments
 
-    solver = "rhoSimpleFoam"
+    solver = "simpleFoam"
     baseCellSize = 0.2  # [m]
 
     cwd = os.getcwd()
 
     templateCase = SolutionDirectory("nacaFOAM-template", archive=None,
                                      paraviewLink=False)
-    newCase = str(naca) + "_" + str(angle) + "_" + str(mach)
+    newCase = str(bluff) + "_" + str(mach)
     case = templateCase.cloneCase(newCase)
     os.chdir(case.name)  # move to case directory to avoid OpenFOAM error of not
                     # finding controlDict
 
     # ----- generate geometry -----
-    generateGeometryFile(case.name, naca, angle)
-    generateSurfaceFeatureExtractDict(case.name, naca, angle)
+    generateBluffBodies(case.name, bluff)
+    generateSurfaceFeatureExtractDict(case.name, bluff)
 
     surfaceFeatureExtract = BasicRunner(
         argv=['surfaceFeatureExtract', "-case", case.name], silent=True,
@@ -149,7 +139,7 @@ def runCase(args):
             return '{}_bM'.format(newCase)
 
         # ----- snappyHexMesh -----
-        generateSnappyHexMeshDict(case.name, naca, angle, mach, baseCellSize, 0)
+        generateSnappyHexMeshDict(case.name, bluff, mach, baseCellSize, 0)
 
         snappyHexMesh_0 = BasicRunner(
             argv=["snappyHexMesh", "-case", case.name, "-overwrite"],
@@ -164,7 +154,7 @@ def runCase(args):
 
         deleteTempMeshFiles(meshDir)
 
-    generateSnappyHexMeshDict(case.name, naca, angle, mach, baseCellSize, 1)
+    generateSnappyHexMeshDict(case.name, bluff, mach, baseCellSize, 1)
 
     snappyHexMesh_1 = BasicRunner(
         argv=["snappyHexMesh", "-case", case.name, "-overwrite"], silent=True,
@@ -179,7 +169,7 @@ def runCase(args):
 
     deleteTempMeshFiles(meshDir)
 
-    generateSnappyHexMeshDict(case.name, naca, angle, mach, baseCellSize, 2)
+    generateSnappyHexMeshDict(case.name, bluff, mach, baseCellSize, 2)
     fvOptionsDir = os.path.join(case.name, "system/fvOptions")
     subprocess.run(["rm", "-f", fvOptionsDir])
 
@@ -258,12 +248,12 @@ def runCase(args):
         os.chdir(cwd)
         return '{}_dP'.format(newCase)
 
-    # ----- rhoSimpleFoam -----
+    # ----- SimpleFoam -----
     machine = LAMMachine(nr=4)
-    rhoSimpleFoam = BasicRunner(argv=[solver, "-case", case.name], silent=True,
-                                lam=machine, logname="rhoSimpleFoam")
-    rhoSimpleFoam.start()
-    if not rhoSimpleFoam.runOK():
+    simpleFoam = BasicRunner(argv=[solver, "-case", case.name], silent=True,
+                                lam=machine, logname="SimpleFoam")
+    simpleFoam.start()
+    if not simpleFoam.runOK():
         deletePyFoamTempFiles(newCase)
         os.chdir(cwd)
         return '{}_solver'.format(newCase)
@@ -322,10 +312,9 @@ def main():
     if not os.path.exists(databaseDir):
         os.makedirs(databaseDir)
 
-    angles = np.arange(-5, 16, 1)
-    machs = np.arange(0.05, 0.65, 0.05)
-    nacas = generateNacaAirfoils()
-    paramlist = list(itertools.product(nacas, angles, np.round(machs, 9)))
+    machs = np.arange(0.05, 0.25, 0.05)
+    bluffs = generateBluff()
+    paramlist = list(itertools.product(bluffs, np.round(machs, 9)))
 
     '''
         OpenFOAM doesn't support hyperthreading
