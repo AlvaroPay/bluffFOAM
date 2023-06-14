@@ -8,6 +8,7 @@
 import os
 import numpy as np
 from stl import mesh
+import matplotlib.pyplot as plt
 
 class generateBluffBody(object):
     def __init__ (self, caseDir, bluff_code):
@@ -22,15 +23,13 @@ class generateBluffBody(object):
             return
 
         self.shape = self.bluff_code[0]
-        self.x_ref_length = 10
+        self.x_ref_length = 1
         self.y_ref_length = int(self.bluff_code[1]+self.bluff_code[2])
         self.AoA = np.radians(int(self.bluff_code[3])*4)
         self.edge = self.bluff_code[4]
         self.nPoints = 400
 
-        if self.edge == "0":
-            self.edge = True
-        elif self.edge == "1":
+        if self.edge == "1":
             self.edge = 0.05*int(self.x_ref_length)
         elif self.edge == "2":
             self.edge = 0.1*int(self.x_ref_length)
@@ -43,7 +42,7 @@ class generateBluffBody(object):
             self.y_ref_length = 0.2*self.y_ref_length*self.x_ref_length
         else:
             self.y_ref_length = (self.y_ref_length/2 - 1.5)*self.x_ref_length
-
+        
     def generateVertices(self):
         if self.shape == "1":
             print("circle")
@@ -63,8 +62,7 @@ class generateBluffBody(object):
         elif self.shape == "2":
             print("rectangle")
             # Calculate rectangle points 
-            if self.edge == True:
-                # TOP
+            if self.edge == "0":
                 p = 2*self.x_ref_length+2*self.y_ref_length
                 d = p/self.nPoints
 
@@ -100,12 +98,12 @@ class generateBluffBody(object):
                 p = 2*self.x_ref_length+2*self.y_ref_length+np.pi*self.edge
                 d = p/(self.nPoints)                
                 
-                angle_r = np.linspace(0, np.pi/2, round((np.pi*self.edge/4)/d), endpoint=False)
-                angle_l = np.linspace(np.pi/2, np.pi, round((np.pi*self.edge/4)/d), endpoint=False)
+                angle_r = np.linspace(np.pi/2, 0, round((np.pi*self.edge/4)/d), endpoint=False)
+                angle_l = np.linspace(np.pi, np.pi/2, round((np.pi*self.edge/4)/d), endpoint=False)
 
                 # TOP
-                x = np.linspace(-self.x_ref_length/2+self.edge/2, self.x_ref_length/2-self.edge/2, round(self.x_ref_length/d), endpoint=False)
-                y = np.ones(round(self.x_ref_length/d))*self.y_ref_length/2
+                x = np.linspace(-self.x_ref_length/2+self.edge/2, self.x_ref_length/2-self.edge/2, round((self.x_ref_length-self.edge)/d), endpoint=False)
+                y = np.ones(round((self.x_ref_length-self.edge)/d))*self.y_ref_length/2
                 top = np.column_stack((x, y))
 
                 x_r = self.x_ref_length/2-self.edge/2+self.edge/2 * np.cos(angle_r)
@@ -118,12 +116,12 @@ class generateBluffBody(object):
                 top_vertex = np.vstack((top_left, top, top_right))
 
                 # BOTTOM
-                x = np.linspace(self.x_ref_length/2-self.edge/2, -self.x_ref_length/2+self.edge/2, round(self.x_ref_length/d), endpoint=False)
-                y = np.ones(round(self.x_ref_length/d))*-self.y_ref_length/2
+                x = np.linspace(self.x_ref_length/2-self.edge/2, -self.x_ref_length/2+self.edge/2, round((self.x_ref_length-self.edge)/d), endpoint=False)
+                y = np.ones(round((self.x_ref_length-self.edge)/d))*-self.y_ref_length/2
                 bottom = np.column_stack((x, y))
 
                 angle_r = np.linspace(0, -np.pi/2, round((np.pi*self.edge/4)/d), endpoint=False)
-                angle_l = np.linspace(-np.pi, -np.pi/2, round((np.pi*self.edge/4)/d), endpoint=False)
+                angle_l = np.linspace(-np.pi/2, -np.pi, round((np.pi*self.edge/4)/d), endpoint=False)
 
                 x_r = self.x_ref_length/2-self.edge/2+self.edge/2 * np.cos(angle_r)
                 y_r = -self.y_ref_length/2+self.edge/2+self.edge/2 * np.sin(angle_r)
@@ -135,13 +133,13 @@ class generateBluffBody(object):
                 bottom_vertex = np.vstack((bottom_right, bottom, bottom_left))
 
                 # RIGHT
-                x = np.ones(round(self.y_ref_length/d))*self.x_ref_length/2
-                y = np.linspace(self.y_ref_length/2-self.edge/2, -self.y_ref_length/2+self.edge/2, round(self.y_ref_length/d), endpoint=False)
+                x = np.ones(round((self.y_ref_length-self.edge/2)/d))*self.x_ref_length/2
+                y = np.linspace(self.y_ref_length/2-self.edge/2, -self.y_ref_length/2+self.edge/2, round((self.y_ref_length-self.edge/2)/d), endpoint=False)
                 right_vertex = np.column_stack((x, y))
 
                 # LEFT
-                x = np.ones(round(self.y_ref_length/d))*-self.x_ref_length/2
-                y = np.linspace(-self.y_ref_length/2+self.edge/2, self.y_ref_length/2-self.edge/2, round(self.y_ref_length/d), endpoint=False)
+                x = np.ones(round((self.y_ref_length-self.edge/2)/d))*-self.x_ref_length/2
+                y = np.linspace(-self.y_ref_length/2+self.edge/2, self.y_ref_length/2-self.edge/2, round((self.y_ref_length-self.edge/2)/d), endpoint=False)
                 left_vertex = np.column_stack((x, y))
 
                 vertices = np.vstack((top_vertex, right_vertex, bottom_vertex, left_vertex))
@@ -154,7 +152,7 @@ class generateBluffBody(object):
 
         elif self.shape == "3":
             print("triangle")
-            if self.edge == True:
+            if self.edge == "0":
                 p = 2*(np.sqrt((self.x_ref_length)**2+(self.y_ref_length/2)**2))+self.y_ref_length
                 d = p/self.nPoints
             
@@ -179,26 +177,24 @@ class generateBluffBody(object):
                 self.vertices[vertices.shape[0]:, :2] = vertices
             
             else:
-                p = 2*(np.sqrt(self.x_ref_length)**2+(self.y_ref_length/2)**2)+self.y_ref_length+np.pi*self.edge
+                p = 2*(np.sqrt((self.x_ref_length)**2+(self.y_ref_length/2)**2))+self.y_ref_length+np.pi*self.edge/4
                 d = p/(self.nPoints)  
                 theta = np.arctan2(self.y_ref_length/2,self.x_ref_length)
-                angle_r = np.linspace(np.pi/2+theta, 3*np.pi/2-theta, round((np.pi*self.edge/4)/d), endpoint=False)
+                angle_r = np.linspace(3*np.pi/2-theta, np.pi/2+theta, round((np.pi*self.edge/3)/d), endpoint=False)
             
-                #x = np.linspace(-2*self.x_ref_length/3+self.edge*(np.cos(theta)**2), self.x_ref_length/3, round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
-                x = np.linspace(-2*self.x_ref_length/3+self.edge*np.cos(theta), self.x_ref_length/3, round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
-                #y = np.linspace(self.edge*(np.cos(theta)*np.sin(theta)),self.y_ref_length/2, round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
-                y = np.linspace(self.edge*np.sin(theta),self.y_ref_length/2, round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
+                x = np.linspace(-2*self.x_ref_length/3+(self.x_ref_length/self.y_ref_length)*self.edge*np.cos(theta), self.x_ref_length/3, round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
+                y = np.linspace((self.x_ref_length/self.y_ref_length)*self.edge*np.sin(theta),self.y_ref_length/2, round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
                 first_vertex = np.column_stack((x, y))
             
-                x = np.linspace(self.x_ref_length/3, -2*self.x_ref_length/3+self.edge*(np.cos(theta)**2), round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
-                y = np.linspace(-self.y_ref_length/2, -self.edge*(np.cos(theta)*np.sin(theta)), round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
+                x = np.linspace(self.x_ref_length/3, -2*self.x_ref_length/3+(self.x_ref_length/self.y_ref_length)*self.edge*np.cos(theta), round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
+                y = np.linspace(-self.y_ref_length/2, -(self.x_ref_length/self.y_ref_length)*self.edge*np.sin(theta), round(np.sqrt(self.x_ref_length**2+(self.y_ref_length/2)**2)/d), endpoint=False)
                 second_vertex = np.column_stack((x, y))
 
                 x = np.ones(round(self.y_ref_length/d))*self.x_ref_length/3
                 y = np.linspace(self.y_ref_length/2, -self.y_ref_length/2, round(self.y_ref_length/d), endpoint=False)
                 third_vertex = np.column_stack((x, y))
 
-                x_r = (-2*self.x_ref_length/3+self.edge/np.cos(theta))+self.edge/2*np.cos(angle_r)
+                x_r = -2*self.x_ref_length/3+self.edge/(2*np.sin(theta))+self.edge/2*np.cos(angle_r)
                 y_r = self.edge/2*np.sin(angle_r)
                 rounding = np.column_stack((x_r, y_r))
 
@@ -213,37 +209,88 @@ class generateBluffBody(object):
 
         elif self.shape == "4":
             print("semistadium")
-            #Semicircle
-            p = np.pi*np.sqrt(((self.y_ref_length/2)**2+(self.x_ref_length/2)**2)/2)+2*self.x_ref_length+self.y_ref_length
-            d = p/self.nPoints
-
-            angles = np.linspace(np.pi/2, -np.pi/2, round((np.pi*np.sqrt(((self.y_ref_length/2)**2+(self.x_ref_length/2)**2)/2))/d), endpoint=False)
-            x = -self.x_ref_length/2 * np.cos(angles) - self.x_ref_length/2 + 4/3*(self.y_ref_length/(2*np.pi))
-            y = -self.y_ref_length/2 * np.sin(angles) 
-            semi = np.column_stack((x,y))
             
-            # TOP
-            x = np.linspace(-self.x_ref_length/2 + 4/3*(self.y_ref_length/(2*np.pi)), self.x_ref_length/2 + 4/3*(self.y_ref_length/(2*np.pi)), round(self.x_ref_length/d), endpoint=False)
-            y = np.ones(round(self.x_ref_length/d))*self.y_ref_length/2
-            top_vertex = np.column_stack((x, y))
+            if self.edge == "0":
+                #Semicircle
+                p = np.pi*np.sqrt(((self.y_ref_length/2)**2+(self.x_ref_length/2)**2)/2)+2*self.x_ref_length+self.y_ref_length
+                d = p/self.nPoints
 
-            # BOTTOM
-            x = np.linspace(self.x_ref_length/2 + 4/3*(self.y_ref_length/(2*np.pi)), -self.x_ref_length/2 + 4/3*(self.y_ref_length/(2*np.pi)), round(self.x_ref_length/d), endpoint=False)
-            y = np.ones(round(self.x_ref_length/d))*-self.y_ref_length/2
-            bottom_vertex = np.column_stack((x, y))
+                angles = np.linspace(np.pi/2, -np.pi/2, round((np.pi*np.sqrt(((self.y_ref_length/2)**2+(self.x_ref_length/2)**2)/2))/d), endpoint=False)
+                x = -self.x_ref_length/2 * np.cos(angles) - self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi))
+                y = -self.y_ref_length/2 * np.sin(angles) 
+                semi = np.column_stack((x,y))
+                
+                # TOP
+                x = np.linspace(-self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi)), self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi)), round(self.x_ref_length/d), endpoint=False)
+                y = np.ones(round(self.x_ref_length/d))*self.y_ref_length/2
+                top_vertex = np.column_stack((x, y))
 
-            # RIGHT
-            x = np.ones(round(self.y_ref_length/d))*self.x_ref_length/2 + 4/3*(self.y_ref_length/(2*np.pi))
-            y = np.linspace(self.y_ref_length/2, -self.y_ref_length/2, round(self.y_ref_length/d), endpoint=False)
-            right_vertex = np.column_stack((x, y))
+                # BOTTOM
+                x = np.linspace(self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi)), -self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi)), round(self.x_ref_length/d), endpoint=False)
+                y = np.ones(round(self.x_ref_length/d))*-self.y_ref_length/2
+                bottom_vertex = np.column_stack((x, y))
 
-            vertices = np.vstack((top_vertex, bottom_vertex, right_vertex, semi))
-            self.vertices = np.zeros((2 * vertices.shape[0], 3))
-            self.vertices[:vertices.shape[0], 2] = 1
-            self.vertices[vertices.shape[0]:, 2] = -1
+                # RIGHT
+                x = np.ones(round(self.y_ref_length/d))*self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi))
+                y = np.linspace(self.y_ref_length/2, -self.y_ref_length/2, round(self.y_ref_length/d), endpoint=False)
+                right_vertex = np.column_stack((x, y))
 
-            self.vertices[:vertices.shape[0], :2] = vertices
-            self.vertices[vertices.shape[0]:, :2] = vertices
+                vertices = np.vstack((top_vertex, right_vertex, bottom_vertex, semi))
+                self.vertices = np.zeros((2 * vertices.shape[0], 3))
+                self.vertices[:vertices.shape[0], 2] = 1
+                self.vertices[vertices.shape[0]:, 2] = -1
+
+                self.vertices[:vertices.shape[0], :2] = vertices
+                self.vertices[vertices.shape[0]:, :2] = vertices
+            
+            else:
+                
+                #Semicircle
+                p = np.pi*np.sqrt(((self.y_ref_length/2)**2+(self.x_ref_length/2)**2)/2)+2*self.x_ref_length+self.y_ref_length-2*self.edge+np.pi*self.edge/2
+                d = p/self.nPoints
+
+                angles = np.linspace(np.pi/2, -np.pi/2, round((np.pi*np.sqrt(((self.y_ref_length/2)**2+(self.x_ref_length/2)**2)/2))/d), endpoint=False)
+                x = -self.x_ref_length/2 * np.cos(angles) - self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi))
+                y = -self.y_ref_length/2 * np.sin(angles) 
+                semi = np.column_stack((x,y))
+                
+                # TOP
+                x = np.linspace(-self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi)), self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi))-self.edge/2, round((self.x_ref_length-self.edge/2)/d), endpoint=False)
+                y = np.ones(round((self.x_ref_length-self.edge/2)/d))*self.y_ref_length/2
+                top = np.column_stack((x, y))
+
+                # BOTTOM
+                x = np.linspace(self.x_ref_length/2-self.edge/2 + 4/3*(self.x_ref_length/(2*np.pi)), -self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi)), round((self.x_ref_length-self.edge/2)/d), endpoint=False)
+                y = np.ones(round((self.x_ref_length-self.edge/2)/d))*-self.y_ref_length/2
+                bottom = np.column_stack((x, y))
+
+                # ROUNDING
+                angle_t = np.linspace(np.pi/2, 0, round((np.pi*self.edge/4)/d), endpoint=False)
+                angle_b = np.linspace(0, -np.pi/2, round((np.pi*self.edge/4)/d), endpoint=False)
+
+                x_t = self.x_ref_length/2-self.edge/2+4/3*(self.x_ref_length/(2*np.pi))+self.edge/2*np.cos(angle_t)
+                y_t = self.y_ref_length/2-self.edge/2+self.edge/2*np.sin(angle_t)
+                top_r = np.column_stack((x_t, y_t))
+
+                x_b = self.x_ref_length/2-self.edge/2+4/3*(self.x_ref_length/(2*np.pi))+self.edge/2*np.cos(angle_b)
+                y_b = -self.y_ref_length/2+self.edge/2+self.edge/2*np.sin(angle_b)
+                bottom_r = np.column_stack((x_b, y_b))
+
+                bottom_vertex = np.vstack((bottom_r, bottom))
+                top_vertex = np.vstack((top, top_r))
+
+                # RIGHT
+                x = np.ones(round((self.y_ref_length-self.edge/2)/d))*self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi))
+                y = np.linspace(self.y_ref_length/2-self.edge/2, -self.y_ref_length/2+self.edge/2, round((self.y_ref_length-self.edge/2)/d), endpoint=False)
+                right_vertex = np.column_stack((x, y))
+
+                vertices = np.vstack((top_vertex, right_vertex, bottom_vertex, semi))
+                self.vertices = np.zeros((2 * vertices.shape[0], 3))
+                self.vertices[:vertices.shape[0], 2] = 1
+                self.vertices[vertices.shape[0]:, 2] = -1
+
+                self.vertices[:vertices.shape[0], :2] = vertices
+                self.vertices[vertices.shape[0]:, :2] = vertices                
     
         if self.AoA != 0:
             if int(self.shape) != 1 or self.y_ref_length != 5:
@@ -296,7 +343,21 @@ class generateBluffBody(object):
         stlFileName = "bluff" + str(self.bluff_code) + ".stl"
         saveDir = os.path.join(folderDir, stlFileName)
         bluff.save(saveDir) 
-        
+
+    def plotVertices(self):
+        fig, ax = plt.subplots()
+        ax.scatter(self.vertices[:, 0], self.vertices[:, 1], s=2)
+        ax.set_aspect('equal')
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        plt.show()
+
+bluff_code = "30502"
+my_bluff_body = generateBluffBody('C:/Users/USUARIO/Desktop/Uni/Master/OUTGOING/Erasmus/Q2/Thesis', bluff_code)
+my_bluff_body.generateVertices()
+my_bluff_body.generateFaces()
+my_bluff_body.generateStandardTriangleLanguageFile()
+my_bluff_body.plotVertices()   
 
        
 
