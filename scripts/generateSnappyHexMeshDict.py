@@ -124,10 +124,7 @@ class generateSnappyHexMeshDict(object):
         if self.meshing == 1:
             f.write('       wing                                                                    \n')
             f.write('       {                                                                       \n')
-            if int(self.airfoil[-2:]) < 10:
-                f.write('           level           (0 2);                                          \n')
-            else:
-                f.write('           level           (0 1);                                          \n')
+            f.write('           level           (0 1);                                              \n')
             f.write('       }                                                                       \n')
         f.write('   }                                                                               \n')
         f.write('                                                                                   \n')
