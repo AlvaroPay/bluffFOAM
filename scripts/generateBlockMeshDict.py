@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------------
-# Created By  : Sebastian Widmann
+# Created By  : Sebastian Widmann and Álvaro Pay Lozano
 # Institution : TU Munich, Department of Aerospace and Geodesy
 # Created Date: June 16, 2022
-# version ='1.0'
+# version ='2.0'
 # ---------------------------------------------------------------------------
 """
 Class implementation to generate background mesh with blockMesh. Background
@@ -29,7 +29,7 @@ class generateBlockMeshDict(object):
         self.setDomainSize()
         self.writeToFile()
 
-    def setDomainSize(self, xMin=-10, xMax=30, yMin=-10, yMax=10):
+    def setDomainSize(self, xMin=-10, xMax=30, yMin=-12.5, yMax=12.5):
         self.xMin = xMin
         self.xMax = xMax
         self.yMin = yMin
