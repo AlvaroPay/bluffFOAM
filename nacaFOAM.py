@@ -53,7 +53,7 @@ def generateBluff():
                         bluff.append(str(s) + 0 + str(a) + str(a) + str(e))
                     else:
                         bluff.append(str(s) + str(a) + str(a) + str(e))
-
+    return bluff
 
 def deleteTempMeshFiles(meshDir):
     '''
