@@ -61,7 +61,7 @@ class generateSnappyHexMeshDict(object):
         f.write('                                                                                   \n')
         f.write('geometry                                                                           \n')
         f.write('{                                                                                  \n')
-        f.write('   bluff_{}.stl \n'.format(self.bluff))
+        f.write('   bluff{}.stl \n'.format(self.bluff))
         f.write('   {                                                                               \n')
         f.write('       type    triSurfaceMesh;                                                     \n')
         f.write('       name    wing;                                                               \n')
@@ -114,7 +114,7 @@ class generateSnappyHexMeshDict(object):
         f.write('   (                                                                               \n')
         if self.meshing == 1:
             f.write('       {                                                                       \n')
-            f.write('           file            "naca{}_{}.eMesh"; \n'.format(self.airfoil, self.angle))
+            f.write('           file            "bluff{}.eMesh"; \n'.format(self.bluff))
             f.write('           level           0;                                                  \n')
             f.write('       }                                                                       \n')
         f.write('   );                                                                              \n')
