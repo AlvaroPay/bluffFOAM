@@ -8,7 +8,6 @@
 import os
 import numpy as np
 from stl import mesh
-import matplotlib.pyplot as plt
 
 class generateBluffBody(object):
     def __init__ (self, caseDir, bluff_code):
@@ -343,21 +342,7 @@ class generateBluffBody(object):
         stlFileName = "bluff" + str(self.bluff_code) + ".stl"
         saveDir = os.path.join(folderDir, stlFileName)
         bluff.save(saveDir) 
-
-    def plotVertices(self):
-        fig, ax = plt.subplots()
-        ax.scatter(self.vertices[:, 0], self.vertices[:, 1], s=2)
-        ax.set_aspect('equal')
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        plt.show()
-
-bluff_code = "30502"
-my_bluff_body = generateBluffBody('C:/Users/USUARIO/Desktop/Uni/Master/OUTGOING/Erasmus/Q2/Thesis', bluff_code)
-my_bluff_body.generateVertices()
-my_bluff_body.generateFaces()
-my_bluff_body.generateStandardTriangleLanguageFile()
-my_bluff_body.plotVertices()   
+   
 
        
 
