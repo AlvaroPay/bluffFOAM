@@ -24,7 +24,7 @@ class generateBluffBody(object):
         self.shape = self.bluff_code[0]
         self.x_ref_length = 1
         self.y_ref_length = int(self.bluff_code[1]+self.bluff_code[2])
-        self.AoA = np.radians(int(self.bluff_code[3])*4)
+        self.AoA = np.radians(int(self.bluff_code[3])*2)
         self.edge = self.bluff_code[4]
         self.nPoints = 400
 
@@ -298,6 +298,8 @@ class generateBluffBody(object):
                 [np.sin(-self.AoA), np.cos(-self.AoA),0],
                 [0, 0, 1]])
                 self.vertices = np.dot(R, self.vertices.T).T
+        
+        ar = self.y_ref_length 
     
     def generateFaces(self):       
         faces = np.zeros((self.vertices.shape[0], 3))
