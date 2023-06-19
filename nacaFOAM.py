@@ -312,7 +312,7 @@ def main():
     if not os.path.exists(databaseDir):
         os.makedirs(databaseDir)
 
-    machs = np.arange(0.05, 0.25, 0.05)
+    machs = np.concatenate(([0.025],np.arange(0.05, 0.30, 0.05))
     bluffs = generateBluff()
     paramlist = list(itertools.product(bluffs, np.round(machs, 9)))
 
