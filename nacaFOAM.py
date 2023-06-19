@@ -40,19 +40,19 @@ def generateBluff():
     '''
     bluff = []
     
-    shape = np.arange(0,5,1)
-    aspect_ratio = np.arange(0,18,1)
+    shape = np.arange(1,5,1)
+    aspect_ratio = np.arange(1,18,1)
     angle = np.arange(0,11,1)
     edge = np.arange(0,5,1)
 
     for s in shape:
-        for a in aspect_ratio:
+        for ar in aspect_ratio:
             for a in angle:
                 for e in edge:
                     if aspect_ratio < 10:
-                        bluff.append(str(s) + 0 + str(a) + str(a) + str(e))
+                        bluff.append(str(s) + 0 + str(ar) + str(a) + str(e))
                     else:
-                        bluff.append(str(s) + str(a) + str(a) + str(e))
+                        bluff.append(str(s) + str(ar) + str(a) + str(e))
     return bluff
 
 def deleteTempMeshFiles(meshDir):
