@@ -16,6 +16,7 @@ import subprocess
 import numpy as np
 
 from flowProperties import *
+from generateStlFile import ar
 
 
 class generateMeshDict(object):
