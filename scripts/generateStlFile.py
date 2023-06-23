@@ -12,7 +12,7 @@ from stl import mesh
 class generateBluffBodies(object):
     def __init__ (self, caseDir, bluff_code):
         self.caseDir = str(caseDir)
-        self.bluff_code = str(bluff_code)
+        self.bluff_code = bluff_code
         if len(self.bluff_code) > 5:
             print("Input needs to contain 5 characters: View coding system for more info")
             self.bluff_code = self.bluff_code[:5]
@@ -41,6 +41,10 @@ class generateBluffBodies(object):
             self.y_ref_length = 0.2*self.y_ref_length*self.x_ref_length
         else:
             self.y_ref_length = (self.y_ref_length/2 - 1.5)*self.x_ref_length
+
+        self.generateVertices()
+        self.generateFaces()
+        self.generateStandardTriangleLanguageFile()
         
     def generateVertices(self):
         if self.shape == "1":
