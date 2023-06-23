@@ -237,6 +237,7 @@ def runCase(args):
     generateInitialConditionsFiles(case.name, mach)
     copytree(os.path.join(case.name, "0.org"), os.path.join(case.name, "0"))
 
+    '''
     # ----- decomposePar -----
     decomposePar = UtilityRunner(argv=["decomposePar"], silent=True,
                                  logname="decomposePar")
@@ -247,17 +248,19 @@ def runCase(args):
         deletePyFoamTempFiles(newCase)
         os.chdir(cwd)
         return '{}_dP'.format(newCase)
+    '''
 
     # ----- SimpleFoam -----
-    machine = LAMMachine(nr=4)
+    #machine = LAMMachine(nr=4)
     simpleFoam = BasicRunner(argv=[solver, "-case", case.name], silent=True,
-                                lam=machine, logname="SimpleFoam")
+                                logname="SimpleFoam")
     simpleFoam.start()
     if not simpleFoam.runOK():
         deletePyFoamTempFiles(newCase)
         os.chdir(cwd)
         return '{}_solver'.format(newCase)
 
+    '''
     # ----- reconstructPar -----
     reconstructPar = UtilityRunner(argv=["reconstructPar"], silent=True,
                                    logname="reconstructPar")
@@ -268,6 +271,7 @@ def runCase(args):
         deletePyFoamTempFiles(newCase)
         os.chdir(cwd)
         return '{}_rP'.format(newCase)
+    '''
 
     # ----- foamToVTK -----
     foamToVTK = BasicRunner(
@@ -312,8 +316,10 @@ def main():
     if not os.path.exists(databaseDir):
         os.makedirs(databaseDir)
 
-    machs = np.concatenate(([0.025],np.arange(0.05, 0.30, 0.05))
-    bluffs = generateBluff()
+    #machs = np.concatenate(([0.025],np.arange(0.05, 0.30, 0.05))
+    machs = np.array([0.1])
+    #bluffs = generateBluff()
+    bluffs = ['10500']
     paramlist = list(itertools.product(bluffs, np.round(machs, 9)))
 
     '''
@@ -321,18 +327,27 @@ def main():
         -> multiprocessing.cpu_count() returns logical core count
         -> psutil.cpu_count(args) will return physical core count
     '''
+    '''
     nCores = psutil.cpu_count(logical=False) - 2
     nProc = 4
     nProcs = int(nCores / nProc)
-
+    '''
+    
     startTime = datetime.now()
 
+    '''
     with multiprocessing.Pool(processes=nProcs) as pool:
         with open('errors.txt', 'w') as f:
             for msg in pool.imap_unordered(runCase, paramlist):
                 if msg is not None:
                     print(msg, file=f)
-
+    '''
+    with open('errors.txt', 'w') as f:
+        for param in paramlist:
+            msg = runCase(param)
+            if msg is not None:
+                print(msg, file=f)
+    
     print(datetime.now() - startTime)
 
 
