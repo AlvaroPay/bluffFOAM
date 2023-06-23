@@ -9,7 +9,7 @@ import os
 import numpy as np
 from stl import mesh
 
-class generateBluffBody(object):
+class generateBluffBodies(object):
     def __init__ (self, caseDir, bluff_code):
         self.caseDir = str(caseDir)
         self.bluff_code = str(bluff_code)
