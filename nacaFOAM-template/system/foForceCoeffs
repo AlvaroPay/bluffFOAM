@@ -28,7 +28,7 @@ forceCoeffs
                                                                                    
    p               p;                                                              
    U               U;                                                              
-   rho             rho;                                                            
+   rho             rhoInf;                                                            
    pRef            95191.76719990617; 
    rhoInf          1.1715447678451316; 
    writeFields     no;                                                             
