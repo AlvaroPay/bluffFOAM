@@ -26,7 +26,6 @@ from scripts.generateSurfaceFeatureExtractDict import \
     generateSurfaceFeatureExtractDict
 from scripts.generateBlockMeshDict import generateBlockMeshDict
 from scripts.generateSnappyHexMeshDict import generateSnappyHexMeshDict
-from scripts.generateFvOptions import generateFvOptionsDict
 from scripts.generateForceCoefficientsDict import generateForceCoefficientsDict
 from scripts.generateZeroDirectoryFiles import generateInitialConditionsFiles
 
