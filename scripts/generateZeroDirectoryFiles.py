@@ -379,6 +379,7 @@ class generateInitialConditionsFiles(object):
         f.write('   {                                                                               \n')
         f.write('       type            flowRateInletVelocity;                                      \n')
         f.write('       massFlowRate    {}; \n'.format(self.mDot))
+        f.write('       rho             1.1715447678451316;                                         \n')
         f.write('       value           $internalField;                                             \n')
         f.write('   }                                                                               \n')
         f.write('                                                                                   \n')
