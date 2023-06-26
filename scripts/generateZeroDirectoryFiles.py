@@ -49,7 +49,6 @@ class generateInitialConditionsFiles(object):
         self.writeToFile_KinematicEddyViscosity()
         self.writeToFile_Pressure()
         self.writeToFile_SpecificDissipationRate()
-        self.writeToFile_Temperature()
         self.writeToFile_TurbulentKineticEnergy()
         self.writeToFile_TurbulentThermalDiffusivity()
         self.writeToFile_Velocity()
