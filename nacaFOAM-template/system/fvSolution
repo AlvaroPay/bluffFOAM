@@ -67,7 +67,6 @@ relaxationFactors
     fields
     {
         p               0.3;
-        rho             0.01;
     }
     equations
     {
