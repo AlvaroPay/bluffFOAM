@@ -50,7 +50,7 @@ class generatePressureCoefficients(object):
         f.write('                                                                                   \n')
         f.write('   p               p;                                                              \n')
         f.write('   U               U;                                                              \n')
-        f.write('   rho             rho;                                                            \n')
+        f.write('   rho             rhoInf;                                                            \n')
         f.write('   pRef            {}; \n'.format(p0))
         f.write('   rhoInf          {}; \n'.format(self.rho))
         f.write('   hydroStaticMode none;                                                           \n')
