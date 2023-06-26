@@ -227,7 +227,6 @@ def runCase(args):
         return '{}_cM'.format(newCase)
 
     # ----- generate various dicts -----
-    generateFvOptionsDict(case.name)
     generateForceCoefficientsDict(case.name, mach)
 
     # ----- restore 0 directory from 0.orig -----
