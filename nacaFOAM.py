@@ -170,8 +170,6 @@ def runCase(args):
     deleteTempMeshFiles(meshDir)
 
     generateSnappyHexMeshDict(case.name, bluff, mach, baseCellSize, 2)
-    fvOptionsDir = os.path.join(case.name, "system/fvOptions")
-    subprocess.run(["rm", "-f", fvOptionsDir])
 
     snappyHexMesh_2 = BasicRunner(
         argv=["snappyHexMesh", "-case", case.name, "-overwrite"], silent=True,
@@ -276,7 +274,7 @@ def runCase(args):
     # ----- foamToVTK -----
     foamToVTK = BasicRunner(
         argv=["foamToVTK", "-latestTime", "-no-boundary", "-fields",
-              "'(TMean UMean alphatMean kMean nutMean omegaMean pMean rhoMean)'",
+              "'(UMean alphatMean kMean nutMean omegaMean pMean rhoMean)'",
               "-overwrite", "-name", newCase], silent=True, logname="foamToVTK")
     foamToVTK.start()
     if foamToVTK.runOK():
@@ -319,7 +317,7 @@ def main():
     #machs = np.concatenate(([0.025],np.arange(0.05, 0.30, 0.05))
     machs = np.array([0.1])
     #bluffs = generateBluff()
-    bluffs = ['10500']
+    bluffs = ['10400']
     paramlist = list(itertools.product(bluffs, np.round(machs, 9)))
 
     '''
