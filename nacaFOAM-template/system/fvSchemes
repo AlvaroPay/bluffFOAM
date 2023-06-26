@@ -38,11 +38,6 @@ divSchemes
     div(phi,k)      bounded Gauss linearUpwind grad(k);
     div(phi,omega)  bounded Gauss linearUpwind grad(omega);
 
-    energy          bounded Gauss linearUpwind limited;
-    div(phi,e)      $energy;
-    div(phi,K)      $energy;
-    div(phi,Ekp)    $energy;
-
     div(phid,p)     Gauss upwind;
 
     div(((rho*nuEff)*dev2(T(grad(U)))))    Gauss linear;
