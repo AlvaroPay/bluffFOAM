@@ -41,7 +41,7 @@ class generateSurfaceFeatureExtractDict(object):
         f.write('}                                                                                  \n')
         f.write('// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //    \n')
         f.write('                                                                                   \n')
-        f.write('bluff_{}.stl \n'.format(self.bluff))
+        f.write('bluff{}.stl \n'.format(self.bluff))
         f.write('{                                                                                  \n')
         f.write('   extractionMethod        extractFromSurface;                                     \n')
         f.write('                                                                                   \n')
