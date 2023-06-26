@@ -31,6 +31,7 @@ class generateInitialConditionsFiles(object):
         self.k_inf = None  # [m^2 * s^-2] Freestream turbulent kinetic energy
         self.omega_inf = None  # [s^-1] Freestream turbulence specific dissipation rate
         self.omega_wall = None  # [s^-1] Wall turbulence specific dissipation rate
+        self.rho = 1.17154
 
         # Constants
         self.I = 0.05  # [%] Turbulence intensity
@@ -379,7 +380,7 @@ class generateInitialConditionsFiles(object):
         f.write('   {                                                                               \n')
         f.write('       type            flowRateInletVelocity;                                      \n')
         f.write('       massFlowRate    {}; \n'.format(self.mDot))
-        f.write('       rho             1.1715447678451316;                                         \n')
+        f.write('       rho             {}; \n'.format(self.rho))                                       
         f.write('       value           $internalField;                                             \n')
         f.write('   }                                                                               \n')
         f.write('                                                                                   \n')
