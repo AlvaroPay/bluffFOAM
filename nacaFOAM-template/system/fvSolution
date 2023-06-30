@@ -37,7 +37,7 @@ solvers
         mergeLevels     1;
     }
 
-    "(U|k|omega|e)"
+    "(U|k|omega)"
     {
         solver          PBiCGStab;
         preconditioner  DILU;
@@ -70,8 +70,7 @@ relaxationFactors
     }
     equations
     {
-        U               0.7;
-        e               0.7;
+        U               0.9;
         "(k|omega)"     0.7;
     }
 }
