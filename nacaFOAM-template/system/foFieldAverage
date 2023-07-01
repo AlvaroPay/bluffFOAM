@@ -41,16 +41,6 @@ fieldAverage
             allowRestart    false;
         }
 
-        rho
-        {
-            mean            yes;
-            prime2Mean      no;
-            base            iteration;
-            windowType      exact;
-            window          100;
-            allowRestart    false;
-        }
-
         k
         {
             mean            yes;
