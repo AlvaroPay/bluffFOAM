@@ -20,7 +20,7 @@ def calculateStaticPressure(M):
 
 
 def calculateStaticDensity(p, T):
-    return 1.17
+    return 1.223
 
 
 def calculateSpeedofSound(T):
