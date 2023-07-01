@@ -65,7 +65,7 @@ class generateInitialConditionsFiles(object):
         self.u = np.array([u, 0, 0])
 
     def calculateMassFlowRate(self):
-        self.mDot = calculateStaticDensity(self.p, self.T) * np.linalg.norm(self.u) * (20 * 1.0)
+        self.mDot = calculateStaticDensity(self.p, self.T) * np.linalg.norm(self.u) * (25 * 1.0)
 
     def calculateTurbulentKineticEnergy(self):
         kLower = 1e-5 * np.linalg.norm(self.u)**2 / calculateReynoldsNumber(calculateStaticDensity(self.p, self.T), np.linalg.norm(self.u), 40, mu)
