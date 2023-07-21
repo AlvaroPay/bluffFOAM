@@ -14,7 +14,7 @@ the "/system" directory.
 import os
 
 from scripts.flowProperties import *
-from scripts.generateStlFile import ar
+from scripts.aspectRatio import calculateAR
 
 class generateSnappyHexMeshDict(object):
     def __init__(self, caseDir, bluff, mach, baseCellSize, meshing):
@@ -23,7 +23,8 @@ class generateSnappyHexMeshDict(object):
         self.mach = mach
         self.baseCellSize = baseCellSize
         self.meshing = meshing
-
+        self.ar = calculateAR(bluff)
+        
         self.writeToFile()
 
     def writeToFile(self):
@@ -71,36 +72,36 @@ class generateSnappyHexMeshDict(object):
         f.write('   refinementBox5                                                                  \n')
         f.write('   {                                                                               \n')
         f.write('       type    box;                                                                \n')
-        f.write('       min     (-0.6 {} -0.5); \n'.format(-ar*1.2))
-        f.write('       max     ( 1.0 {}  {}); \n'.format(ar*1.2, -round(0.5 - (self.baseCellSize / 2**5), 9)))
+        f.write('       min     (-0.6 {} -0.5); \n'.format(-self.ar*0.6))
+        f.write('       max     ( 0.7 {}  {}); \n'.format(self.ar*0.6, -round(0.5 - (self.baseCellSize / 2**5), 9)))
         f.write('                                                                                   \n')
         f.write('   }                                                                               \n')
         f.write('   refinementBox4                                                                  \n')
         f.write('   {                                                                               \n')
         f.write('       type    box;                                                                \n')
-        f.write('       min     (-0.8 {} -0.5); \n'.format(-ar*2))                                                
-        f.write('       max     ( 2   {} {}); \n'.format(ar*2, -round(0.5 - (self.baseCellSize / 2**5), 9)))
+        f.write('       min     (-0.8 {} -0.5); \n'.format(-self.ar*1))                                                
+        f.write('       max     ( 2   {} {}); \n'.format(self.ar*1, -round(0.5 - (self.baseCellSize / 2**5), 9)))
         f.write('   }                                                                               \n')
         f.write('                                                                                   \n')
         f.write('   refinementBox3                                                                  \n')
         f.write('   {                                                                               \n')
         f.write('       type    box;                                                                \n')
-        f.write('       min     (-1 {} -0.5);  \n'.format(-ar*3))                                                    
-        f.write('       max     ( 5 {} {}); \n'.format(ar*3, -round(0.5 - (self.baseCellSize / 2**5), 9)))
+        f.write('       min     (-1 {} -0.5);  \n'.format(-self.ar*1.5))                                                    
+        f.write('       max     ( 5 {} {}); \n'.format(self.ar*1.5, -round(0.5 - (self.baseCellSize / 2**5), 9)))
         f.write('   }                                                                               \n')
         f.write('                                                                                   \n')
         f.write('   refinementBox2                                                                  \n')
         f.write('   {                                                                               \n')
         f.write('       type    box;                                                                \n')
-        f.write('       min     (-2.5  {} -0.5); \n'.format(-ar*5))                                                       
-        f.write('       max     ( 10  {} {}); \n'.format(ar*5, -round(0.5 - (self.baseCellSize / 2**5), 9)))
+        f.write('       min     (-2.5  {} -0.5); \n'.format(-self.ar*2.5))                                                       
+        f.write('       max     ( 10  {} {}); \n'.format(self.ar*2.5, -round(0.5 - (self.baseCellSize / 2**5), 9)))
         f.write('   }                                                                               \n')
         f.write('                                                                                   \n')
         f.write('   refinementBox1                                                                  \n')
         f.write('   {                                                                               \n')
         f.write('       type    box;                                                                \n')
-        f.write('       min     (-5.5  {} -0.5); \n'.format(-ar*8))                                                      
-        f.write('       max     ( 19.5 {} {}); \n'.format(ar*8, -round(0.5 - (self.baseCellSize / 2**5), 9)))
+        f.write('       min     (-5.5  {} -0.5); \n'.format(-self.ar*4))                                                      
+        f.write('       max     ( 19.5 {} {}); \n'.format(self.ar*4, -round(0.5 - (self.baseCellSize / 2**5), 9)))
         f.write('   }                                                                               \n')
         f.write('}                                                                                  \n')
         f.write('                                                                                   \n')
@@ -269,3 +270,4 @@ class generateSnappyHexMeshDict(object):
         f.write('                                                                                   \n')
         f.write('// ************************************************************************* //    \n')
         f.close()
+
