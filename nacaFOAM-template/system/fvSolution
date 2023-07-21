@@ -57,6 +57,7 @@ solvers
 SIMPLE
 {
     nNonOrthogonalCorrectors 0;
+    consistent yes;
 
     pMinFactor          0.1;
     pMaxFactor          2;
@@ -66,12 +67,12 @@ relaxationFactors
 {
     fields
     {
-        p               0.3;
+        p               0.5;
     }
     equations
     {
-        U               0.9;
-        "(k|omega)"     0.7;
+        U               0.6;
+        "(k|omega)"     0.6;
     }
 }
 
