@@ -123,35 +123,34 @@ def runCase(args):
 
     meshDir = os.path.join(case.name, "constant/polyMesh")
 
-    if baseCellSize != 0.2:
-        # ----- blockMesh -----
-        generateBlockMeshDict(case.name, baseCellSize)
+    # ----- blockMesh -----
+    generateBlockMeshDict(case.name, baseCellSize)
 
-        blockMesh = BasicRunner(argv=["blockMesh", "-case", case.name],
+    blockMesh = BasicRunner(argv=["blockMesh", "-case", case.name],
                                 silent=True, logname="blockMesh")
-        blockMesh.start()
-        if blockMesh.runOK():
-            subprocess.run(["rm", "-f", "blockMesh.logfile"])
-        if not blockMesh.runOK():
-            deletePyFoamTempFiles(newCase)
-            os.chdir(cwd)
-            return '{}_bM'.format(newCase)
+    blockMesh.start()
+    if blockMesh.runOK():
+        subprocess.run(["rm", "-f", "blockMesh.logfile"])
+    if not blockMesh.runOK():
+        deletePyFoamTempFiles(newCase)
+        os.chdir(cwd)
+        return '{}_bM'.format(newCase)
 
-        # ----- snappyHexMesh -----
-        generateSnappyHexMeshDict(case.name, bluff, mach, baseCellSize, 0)
+    # ----- snappyHexMesh -----
+    generateSnappyHexMeshDict(case.name, bluff, mach, baseCellSize, 0)
 
-        snappyHexMesh_0 = BasicRunner(
-            argv=["snappyHexMesh", "-case", case.name, "-overwrite"],
-            silent=True, logname="sHM_0")
-        snappyHexMesh_0.start()
-        if snappyHexMesh_0.runOK():
-            subprocess.run(["rm", "-f", "sHM_0.logfile"])
-        if not snappyHexMesh_0.runOK():
-            deletePyFoamTempFiles(newCase)
-            os.chdir(cwd)
-            return '{}_sHM0'.format(newCase)
+    snappyHexMesh_0 = BasicRunner(
+        argv=["snappyHexMesh", "-case", case.name, "-overwrite"],
+        silent=True, logname="sHM_0")
+    snappyHexMesh_0.start()
+    if snappyHexMesh_0.runOK():
+        subprocess.run(["rm", "-f", "sHM_0.logfile"])
+    if not snappyHexMesh_0.runOK():
+        deletePyFoamTempFiles(newCase)
+        os.chdir(cwd)
+        return '{}_sHM0'.format(newCase)
 
-        deleteTempMeshFiles(meshDir)
+    deleteTempMeshFiles(meshDir)
 
     generateSnappyHexMeshDict(case.name, bluff, mach, baseCellSize, 1)
 
@@ -227,7 +226,7 @@ def runCase(args):
         return '{}_cM'.format(newCase)
 
     # ----- generate various dicts -----
-    generateForceCoefficientsDict(case.name, mach)
+    generateForceCoefficientsDict(case.name, mach, bluff)
 
     # ----- restore 0 directory from 0.orig -----
     generateInitialConditionsFiles(case.name, mach)
