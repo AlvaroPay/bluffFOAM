@@ -31,7 +31,8 @@ class generateInitialConditionsFiles(object):
         self.k_inf = None  # [m^2 * s^-2] Freestream turbulent kinetic energy
         self.omega_inf = None  # [s^-1] Freestream turbulence specific dissipation rate
         self.omega_wall = None  # [s^-1] Wall turbulence specific dissipation rate
-
+        self.rho = 1.223
+        
         # Constants
         self.I = 0.05  # [%] Turbulence intensity
         self.C_mu = 0.09  # [-] Constant related to k-omega SST model
@@ -50,7 +51,6 @@ class generateInitialConditionsFiles(object):
         self.writeToFile_Pressure()
         self.writeToFile_SpecificDissipationRate()
         self.writeToFile_TurbulentKineticEnergy()
-        self.writeToFile_TurbulentThermalDiffusivity()
         self.writeToFile_Velocity()
 
     def calculatePressure(self):
@@ -154,7 +154,7 @@ class generateInitialConditionsFiles(object):
         f.write('}                                                                                  \n')
         f.write('// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //    \n')
         f.write('                                                                                   \n')
-        f.write('dimensions             [1 -1 -2 0 0 0 0];                                          \n')
+        f.write('dimensions             [0 2 -2 0 0 0 0];                                           \n')
         f.write('                                                                                   \n')
         f.write('internalField          uniform {}; \n'.format(self.p))
         f.write('                                                                                   \n')
@@ -295,60 +295,6 @@ class generateInitialConditionsFiles(object):
         f.write('// ************************************************************************* //    \n')
         f.close()
 
-    def writeToFile_TurbulentThermalDiffusivity(self):
-        saveDir = os.path.join(self.caseDir, '0.org/alphat')
-        f = open(saveDir, 'w+')
-
-        f.write('/*--------------------------------*- C++ -*----------------------------------*\\   \n')
-        f.write('| =========                 |                                                 |    \n')
-        f.write('| \\\\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |  \n')
-        f.write('|  \\\\    /   O peration     | Version:  v2206                                 |  \n')
-        f.write('|   \\\\  /    A nd           | Website:  www.openfoam.com                      |  \n')
-        f.write('|    \\\\/     M anipulation  |                                                 |  \n')
-        f.write('\\*---------------------------------------------------------------------------*/   \n')
-        f.write('FoamFile                                                                           \n')
-        f.write('{                                                                                  \n')
-        f.write('    version     2.0;                                                               \n')
-        f.write('    format      ascii;                                                             \n')
-        f.write('    class       volScalarField;                                                    \n')
-        f.write('    object      alphat;                                                            \n')
-        f.write('}                                                                                  \n')
-        f.write('// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //    \n')
-        f.write('                                                                                   \n')
-        f.write('dimensions             [1 -1 -1 0 0 0 0];                                          \n')
-        f.write('                                                                                   \n')
-        f.write('internalField          uniform 0;                                                  \n')
-        f.write('                                                                                   \n')
-        f.write('boundaryField                                                                      \n')
-        f.write('{                                                                                  \n')
-        f.write('   inlet                                                                           \n')
-        f.write('   {                                                                               \n')
-        f.write('       type            calculated;                                                 \n')
-        f.write('       value           $internalField;                                             \n')
-        f.write('   }                                                                               \n')
-        f.write('                                                                                   \n')
-        f.write('   outlet                                                                          \n')
-        f.write('   {                                                                               \n')
-        f.write('       type            zeroGradient;                                               \n')
-        f.write('   }                                                                               \n')
-        f.write('                                                                                   \n')
-        f.write('   wall                                                                            \n')
-        f.write('   {                                                                               \n')
-        f.write('       type            compressible::alphatWallFunction;                           \n')
-        f.write('       value           uniform 1e-10;                                              \n')
-        f.write('   }                                                                               \n')
-        f.write('                                                                                   \n')
-        f.write('   "(top|bottom)"                                                                  \n')
-        f.write('   {                                                                               \n')
-        f.write('       type            slip;                                                       \n')
-        f.write('   }                                                                               \n')
-        f.write('                                                                                   \n')
-        f.write('   #includeEtc "caseDicts/setConstraintTypes"                                      \n')
-        f.write('}                                                                                  \n')
-        f.write('                                                                                   \n')
-        f.write('// ************************************************************************* //    \n')
-        f.close()
-
     def writeToFile_Velocity(self):
         saveDir = os.path.join(self.caseDir, '0.org/U')
         f = open(saveDir, 'w+')
@@ -377,9 +323,7 @@ class generateInitialConditionsFiles(object):
         f.write('{                                                                                  \n')
         f.write('   inlet                                                                           \n')
         f.write('   {                                                                               \n')
-        f.write('       type            flowRateInletVelocity;                                      \n')
-        f.write('       massFlowRate    {}; \n'.format(self.mDot))
-        f.write('       rho             {}; \n'.format(self.rho))                                       
+        f.write('       type            fixedValue;                                                 \n')
         f.write('       value           $internalField;                                             \n')
         f.write('   }                                                                               \n')
         f.write('                                                                                   \n')
