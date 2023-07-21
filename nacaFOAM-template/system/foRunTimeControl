@@ -25,8 +25,8 @@ runTimeControl
             type            average;
             functionObject  forceCoeffs;
             fields          (Cd);
-            tolerance       1e-3;
-            window          200;
+            tolerance       2e-3;
+            window          700;
             windowType      exact;
             groupID         1;
         }
@@ -36,8 +36,8 @@ runTimeControl
             type            average;
             functionObject  forceCoeffs;
             fields          (Cl);
-            tolerance       1e-3;
-            window          200;
+            tolerance       2e-3;
+            window          700;
             windowType      exact;
             groupID         1;
         }
