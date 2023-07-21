@@ -27,7 +27,7 @@ fieldAverage
             prime2Mean      no;
             base            iteration;
             windowType      exact;
-            window          500;
+            window          700;
             allowRestart    false;
         }
 
@@ -37,7 +37,7 @@ fieldAverage
             prime2Mean      no;
             base            iteration;
             windowType      exact;
-            window          500;
+            window          700;
             allowRestart    false;
         }
 
