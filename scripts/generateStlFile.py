@@ -51,8 +51,8 @@ class generateBluffBodies(object):
             print("circle")
             # Calculate circle points
             angles = np.linspace(0, 2*np.pi, self.nPoints, endpoint=False)
-            x = self.x_ref_length * np.cos(angles)
-            y = self.y_ref_length * np.sin(angles)
+            x = self.x_ref_length/2 * np.cos(angles)
+            y = self.y_ref_length/2 * np.sin(angles)
             vertices = np.column_stack((x, y))
             
             self.vertices = np.zeros((2 * vertices.shape[0], 3))
