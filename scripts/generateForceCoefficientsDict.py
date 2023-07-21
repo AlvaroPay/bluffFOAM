@@ -11,9 +11,10 @@ into the "/system" directory.
 # ---------------------------------------------------------------------------
 import os
 from scripts.flowProperties import *
+from scripts.aspectRatio import calculateAR
 
 class generateForceCoefficientsDict(object):
-    def __init__(self, caseDir, mach):
+    def __init__(self, caseDir, mach, bluff):
         self.caseDir = caseDir
         self.mach = mach
 
@@ -21,7 +22,8 @@ class generateForceCoefficientsDict(object):
         self.T = calculateStaticTemperature(self.mach)
         self.rho = calculateStaticDensity(self.p, self.T)
         self.u = self.mach * calculateSpeedofSound(self.T)
-
+        self.ar = calculateAR(bluff)
+        
         self.writeToFile()
 
     def writeToFile(self):
@@ -68,7 +70,7 @@ class generateForceCoefficientsDict(object):
         f.write('   pitchAxis       (0 0 1);                                                        \n')
         f.write('   magUInf         {}; \n'.format(self.u))
         f.write('   lRef            1;                                                              \n')
-        f.write('   Aref            1;                                                              \n')
+        f.write('   Aref            {}; \n'.format(2*self.ar))                                                            
         f.write('                                                                                   \n')
         f.write('   binData                                                                         \n')
         f.write('   {                                                                               \n')
