@@ -70,7 +70,7 @@ class generateForceCoefficientsDict(object):
         f.write('   pitchAxis       (0 0 1);                                                        \n')
         f.write('   magUInf         {}; \n'.format(self.u))
         f.write('   lRef            1;                                                              \n')
-        f.write('   Aref            {}; \n'.format(2*self.ar))                                                            
+        f.write('   Aref            {}; \n'.format(self.ar))                                                            
         f.write('                                                                                   \n')
         f.write('   binData                                                                         \n')
         f.write('   {                                                                               \n')
