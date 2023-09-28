@@ -1,8 +1,7 @@
-# nacaFOAM
+# bluffFOAM
 
 CFD simulation pipeline using the `OpenFOAM` framework to generate a 2D 
-database for machine learning purposes using NACA symmetrical, 4- and 
-5-digit airfoils.
+database for machine learning purposes using bluff body shapes generated through a self-made 5-digits coding system
 
 The pipeline can generate results of subsonic simulations for Mach numbers 
 `M < 0.6` and any angle of attack. However, it is advised to stay within 
