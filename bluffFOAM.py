@@ -95,7 +95,7 @@ def runCase(args):
     bluff, mach = args  # unpack arguments
 
     solver = "simpleFoam"
-    baseCellSize = 0.2  # [m]
+    baseCellSize = 0.  # [m]
 
     cwd = os.getcwd()
 
