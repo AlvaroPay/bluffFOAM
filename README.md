@@ -1,7 +1,9 @@
 # bluffFOAM
 
 CFD simulation pipeline using the `OpenFOAM` framework to generate a 2D 
-database for machine learning purposes using bluff body shapes generated through a self-made 5-digits coding system
+database for machine learning purposes using bluff body shapes generated through a self-made 5-digits coding system:
+
+![Alt text](code_generation.PNG "Optional title")
 
 The pipeline can generate results of subsonic simulations for Mach numbers 
 `M < 0.6` and any angle of attack. However, it is advised to stay within 
