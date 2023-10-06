@@ -62,10 +62,10 @@ The subsets of the *airfoilMNIST* datasets are subsequently linked here once the
     *     mach = np.arange(0.05, 0.65, 0.05)
 * Specify range of bluff geometries through function `generateBluff()` decommenting line 315 and commenting 316
         * In the function the different digits can be modified
-              *shape = np.arange(1,5,1)
-              *aspect_ratio = np.arange(1,18,1)
-              *angle = np.arange(0,11,1)
-              *edge = np.arange(0,5,1)
+    *     shape = np.arange(1,5,1)
+    *     aspect_ratio = np.arange(1,18,1)
+    *     angle = np.arange(0,11,1)
+    *     edge = np.arange(0,5,1)
 * Execute `bluffFOAM.py` script
 
 ### 2.6 Run single simulation
