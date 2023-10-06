@@ -83,5 +83,11 @@ The subsets of the *airfoilMNIST* datasets are subsequently linked here once the
   `nacaFOAM.py` script has been executed sucessfully. This script will generate
   a new `.csv` file within the `database` directory.
 
+## 3. Setup modification
 
+As explained in detail in the report, some parameters need to be iterated depending on the specific scenario due to
+the complexity of running bluff bodies in RANS stable simulations. The parameters that can be iterated to improve
+the accuracy and stability are:
+*  Under-relaxation factors: Keep pressure equation and velocity field the same and in a range between 0.2 to 0.6 and the k and omega betweeen 0.35 and 0.7 in `bluffFOAMtemplate` and `fvSolution`.
+*  Number of iterations: If they are not enough to get converged solutions, increase them in `bluffFOAMtemplate` and `controlDict` changing `endTime` and `writeInterval` and keeping in both the same number.
 
