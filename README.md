@@ -1,12 +1,11 @@
 # nacaFOAM
 
 CFD simulation pipeline using the `OpenFOAM` framework to generate a 2D 
-database for machine learning purposes using NACA symmetrical, 4- and 
-5-digit airfoils.
+database for machine learning purposes using custom 5 digits code for bluff body generation.
 
-The pipeline can generate results of subsonic simulations for Mach numbers 
-`M < 0.6` and any angle of attack. However, it is advised to stay within 
-`alpha = [-20, 20] deg` as any lower or higher angle will only predict 
+The pipeline can generate results of incompressible simulations for Mach numbers 
+`M < 0.3` and any angle of attack. However, it is advised to stay within 
+`alpha = [-15, 15] deg` as any lower or higher angle will only predict 
 separation.
 
 The detailed explanation about the simulation pipeline as well as the 
@@ -14,12 +13,12 @@ performed verification and validation can be found here (LINK TO PAPER).
 
 To reference this algorithm, please cite the repository as:
 ```
-@misc{widmann2023nacaFOAM,
+@misc{pay2023bluffFOAM,
   title={Automated Aerodynamic 2D Data Generation for Machine Learning},
-  author={Widmann, Sebastian and Schlichter, Philipp and Reck, Michaela and Indinger, Thomas},
+  author={Pay Lozano, Álvaro and Schlichter, Philipp and Indinger, Thomas},
   year={2023},
   publisher={GitHub},
-  howpublished={\url{https://github.com/sebastianwidmann/nacaFOAM}},
+  howpublished={\url{https://github.com/AlvaroPay/bluffFOAM}},
 }
 ```
 
@@ -92,7 +91,7 @@ respecify the following arguments
   with the following lines
     *     angles = np.array([0])
     *     machs = np.array([0.15])
-    *     nacas = ['0012']
+    *     bluff = ['10012']
 * Execute `nacaFOAM.py` script
 
 ### 2.7 Postprocessing
