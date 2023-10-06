@@ -95,7 +95,7 @@ def runCase(args):
     bluff, mach = args  # unpack arguments
 
     solver = "simpleFoam"
-    baseCellSize = 0.  # [m]
+    baseCellSize = 0.3  # [m]
 
     cwd = os.getcwd()
 
@@ -311,7 +311,6 @@ def main():
     if not os.path.exists(databaseDir):
         os.makedirs(databaseDir)
 
-    #machs = np.concatenate(([0.025],np.arange(0.05, 0.30, 0.05))
     machs = np.array([0.1])
     #bluffs = generateBluff()
     bluffs = ['10400']
