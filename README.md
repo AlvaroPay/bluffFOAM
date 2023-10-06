@@ -71,9 +71,9 @@ The subsets of the *airfoilMNIST* datasets are subsequently linked here once the
 ### 2.6 Run single simulation
 
 * Specify the bluff code that wants to be run in line 316:
-     *    bluffs = ['10400']
+    *     bluffs = ['10400']
 * Specify the mach number in line 314:
-     *    machs = np.array([0.1])   
+    *     machs = np.array([0.1])   
 * Execute `bluffFOAM.py` script
 
 ### 2.7 Postprocessing
