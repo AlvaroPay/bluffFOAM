@@ -1,3 +1,15 @@
+# ----------------------------------------------------------------------------
+# Created By  : Álvaro Pay Lozano
+# Institution : TU Munich, Department of Aerospace and Geodesy
+# Created Date: May 12, 2022
+# version ='2.0'
+# ---------------------------------------------------------------------------
+"""
+Aspect ratio is calculated considering the normal geometry for force coefficient 
+calculation and considering the rotation for the refinement boxes sizing
+"""
+# ---------------------------------------------------------------------------
+
 import numpy as np
 
 def calculateAR(bluff):
