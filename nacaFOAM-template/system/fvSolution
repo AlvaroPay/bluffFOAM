@@ -32,7 +32,7 @@ solvers
         scaleCorrection true;
         directSolveCoarsestLevel false;
         cacheAgglomeration on;
-        nCellsInCoarsestLevel 500;
+        nCellsInCoarsestLevel 10;
         agglomerator    faceAreaPair;
         mergeLevels     1;
     }
@@ -67,12 +67,12 @@ relaxationFactors
 {
     fields
     {
-        p               0.5;
+        p               0.45;
     }
     equations
     {
-        U               0.6;
-        "(k|omega)"     0.6;
+        U               0.45;
+        "(k|omega)"     0.65;
     }
 }
 
