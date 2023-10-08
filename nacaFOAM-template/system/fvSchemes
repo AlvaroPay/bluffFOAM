@@ -36,7 +36,7 @@ divSchemes
     div(phi,U)      bounded Gauss linearUpwind grad(U);
 
     div(phi,k)      bounded Gauss linearUpwind grad(k);
-    div(phi,omega)  bounded Gauss liearUpwind grad(omega);
+    div(phi,omega)  bounded Gauss linearUpwind grad(omega);
 
     div(phid,p)     Gauss upwind;
 
