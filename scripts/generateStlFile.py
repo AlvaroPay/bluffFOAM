@@ -11,6 +11,9 @@ from stl import mesh
 
 class generateBluffBodies(object):
     def __init__ (self, caseDir, bluff_code):
+        '''
+            Initialization of the different variables for the bluff_code string input
+        '''    
         self.caseDir = str(caseDir)
         self.bluff_code = bluff_code
         if len(self.bluff_code) > 5:
@@ -37,16 +40,21 @@ class generateBluffBodies(object):
         elif self.edge == "4":
             self.edge = 0.25*int(self.x_ref_length)
         
-        if self.y_ref_length <= 5:
-            self.y_ref_length = 0.2*self.y_ref_length*self.x_ref_length
+        if self.y_ref_length <= 10:
+            self.y_ref_length = 0.1*self.y_ref_length*self.x_ref_length
         else:
-            self.y_ref_length = (self.y_ref_length/2 - 1.5)*self.x_ref_length
+            self.y_ref_length = (self.y_ref_length/5-1)*self.x_ref_length
 
         self.generateVertices()
         self.generateFaces()
         self.generateStandardTriangleLanguageFile()
         
     def generateVertices(self):
+        '''
+            Generation of the vertices depending on the chosen geometry. The points are generated to be equidistant
+            (considering the perimeter) and are duplicated in z=-0.5 and z=0.5 to afterwards connect them in the
+            3D extrusion. The edges are included with a conditional and all the (0,0) are always located in the centroid
+        '''
         if self.shape == "1":
             print("circle")
             # Calculate circle points
@@ -201,7 +209,7 @@ class generateBluffBodies(object):
                 y_r = self.edge/2*np.sin(angle_r)
                 rounding = np.column_stack((x_r, y_r))
 
-                vertices = np.vstack((first_vertex, second_vertex, third_vertex, rounding))
+                vertices = np.vstack((first_vertex, third_vertex, second_vertex, rounding))
                 self.vertices = np.zeros((2 * vertices.shape[0], 3))
                 self.vertices[:vertices.shape[0], 2] = 1
                 self.vertices[vertices.shape[0]:, 2] = -1
@@ -215,10 +223,12 @@ class generateBluffBodies(object):
             
             if self.edge == "0":
                 #Semicircle
+                #Approximation for elipse perimeter = 2×pi×qqrt((r1^2 + r2^2)/2)
                 p = np.pi*np.sqrt(((self.y_ref_length/2)**2+(self.x_ref_length/2)**2)/2)+2*self.x_ref_length+self.y_ref_length
                 d = p/self.nPoints
 
                 angles = np.linspace(np.pi/2, -np.pi/2, round((np.pi*np.sqrt(((self.y_ref_length/2)**2+(self.x_ref_length/2)**2)/2))/d), endpoint=False)
+                # 4/3pi is the centroid of a semicircle from the center axis
                 x = -self.x_ref_length/2 * np.cos(angles) - self.x_ref_length/2 + 4/3*(self.x_ref_length/(2*np.pi))
                 y = -self.y_ref_length/2 * np.sin(angles) 
                 semi = np.column_stack((x,y))
@@ -302,10 +312,12 @@ class generateBluffBodies(object):
                 [np.sin(-self.AoA), np.cos(-self.AoA),0],
                 [0, 0, 1]])
                 self.vertices = np.dot(R, self.vertices.T).T
-        
-        ar = self.y_ref_length 
     
     def generateFaces(self):       
+        '''
+            Generation of the faces connecting the extrusion and triangulating each points 
+            with two adyacent vertices. NOTE: Important to keep the points sorted clockwise
+        '''
         faces = np.zeros((self.vertices.shape[0], 3))
 
         for i in range(int(0.5 * faces.shape[0]) - 1):
@@ -332,9 +344,12 @@ class generateBluffBodies(object):
         faces = np.concatenate((faces, facesSide), axis=0)
 
         self.faces = faces.astype(int)
-        print(self.faces)
 
     def generateStandardTriangleLanguageFile(self):
+        '''
+            Generation of the .stl using the STL library and connecting the faces and vertices.
+            The result is saved as bluff{5digitcode}
+        '''
         bluff = mesh.Mesh(np.zeros(self.faces.shape[0], dtype=mesh.Mesh.dtype))
         for i, f in enumerate(self.faces):
             for j in range(3):
