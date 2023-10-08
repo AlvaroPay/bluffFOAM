@@ -23,7 +23,7 @@ class generateSnappyHexMeshDict(object):
         self.mach = mach
         self.baseCellSize = baseCellSize
         self.meshing = meshing
-        self.ar = calculateAR(bluff)
+        _, self.ar = calculateAR(bluff)
         
         self.writeToFile()
 
@@ -72,14 +72,14 @@ class generateSnappyHexMeshDict(object):
         f.write('   refinementBox5                                                                  \n')
         f.write('   {                                                                               \n')
         f.write('       type    box;                                                                \n')
-        f.write('       min     (-0.6 {} -0.5); \n'.format(-self.ar*0.6))
-        f.write('       max     ( 0.7 {}  {}); \n'.format(self.ar*0.6, -round(0.5 - (self.baseCellSize / 2**5), 9)))
+        f.write('       min     (-0.7 {} -0.5); \n'.format(-self.ar*0.6))
+        f.write('       max     ( 0.8 {}  {}); \n'.format(self.ar*0.6, -round(0.5 - (self.baseCellSize / 2**5), 9)))
         f.write('                                                                                   \n')
         f.write('   }                                                                               \n')
         f.write('   refinementBox4                                                                  \n')
         f.write('   {                                                                               \n')
         f.write('       type    box;                                                                \n')
-        f.write('       min     (-0.8 {} -0.5); \n'.format(-self.ar*1))                                                
+        f.write('       min     (-0.85 {} -0.5); \n'.format(-self.ar*1))                                                
         f.write('       max     ( 2   {} {}); \n'.format(self.ar*1, -round(0.5 - (self.baseCellSize / 2**5), 9)))
         f.write('   }                                                                               \n')
         f.write('                                                                                   \n')
