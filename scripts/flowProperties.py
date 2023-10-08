@@ -1,3 +1,15 @@
+# ----------------------------------------------------------------------------
+# Created By  : Sebastian Widdman and Álvaro Pay Lozano
+# Institution : TU Munich, Department of Aerospace and Geodesy
+# Created Date: May 18, 2022
+# version ='2.0'
+# ---------------------------------------------------------------------------
+"""
+Flow properties are calculated with the main objective of obtaining the 
+height of the first layer of the prisms from a target yplus
+"""
+# ---------------------------------------------------------------------------
+
 from numpy import sqrt, power, log10
 
 # Define thermodynamic properties of air at ICAO standard atmosphere
@@ -48,4 +60,8 @@ def calculateFirstLayerThickness(mach, yPlus):
     cf = power(2 * log10(Re) - 0.65, -2.3)  # [-] Skin friction coefficient based on Schlichting
     Tau_w = 0.5 * cf * rho * u ** 2  # [Pa] Wall shear stress
     u_star = sqrt(Tau_w / rho)  # [m*s^-1] Friction velocity
-    return yPlus * mu / (rho * u_star)
+        if u > 3:
+        return yPlus * mu / (rho * u_star)
+    
+    else:
+        return (yPlus * mu / (rho * u_star))/(3/u) #Correction for improving mesh quality in low speeds
